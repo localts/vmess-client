@@ -9,6 +9,7 @@ import (
 	"log"
 	"math/rand"
 	"net"
+	"runtime/debug"
 	"socks5"
 	"strings"
 	"time"
@@ -17,8 +18,8 @@ import (
 
 const (
 	REMOTE_DAIL_TIMEOUT    = 10
-	CONN_M0AX_LIVE_TIMEOUT = 1200
-	BUFFER_SIZE            = 512
+	CONN_M0AX_LIVE_TIMEOUT = 5
+	BUFFER_SIZE            = 256
 )
 
 type VmessHub struct {
@@ -228,6 +229,11 @@ func (vh *VmessHub) handleRemote(localConn net.Conn, shost, sport, rhost string)
 		return
 	}
 
+	defer func() {
+		debug.FreeOSMemory()
+		remoteConn.Close()
+	}()
+
 	vcRemoteConn, err := vh.VC.NewConn(remoteConn, fmt.Sprintf("%s:%s", shost, sport))
 
 	if err != nil {
@@ -253,7 +259,7 @@ func (vh *VmessHub) handleRemote(localConn net.Conn, shost, sport, rhost string)
 				return
 			}
 		case <-time.After(time.Second * time.Duration(CONN_M0AX_LIVE_TIMEOUT)):
-			//log.Printf("close conn by timer %s:%s", shost, sport)
+//			log.Printf("close conn by timer %s:%s\n", shost, sport)
 			return
 		}
 
