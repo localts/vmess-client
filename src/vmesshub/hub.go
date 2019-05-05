@@ -17,7 +17,7 @@ import (
 
 const (
 	REMOTE_DAIL_TIMEOUT    = 10
-	CONN_M0AX_LIVE_TIMEOUT = 5
+	CONN_M0AX_LIVE_TIMEOUT = 60
 	BUFFER_SIZE            = 256
 )
 
