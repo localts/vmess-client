@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"math/rand"
 	"net"
 	"runtime/debug"
 	"socks5"
@@ -269,7 +268,7 @@ func (vh *VmessHub) handleRemote(localConn net.Conn, shost, sport, rhost string)
 }
 
 func readDataFromClient(ch chan byte, localConn net.Conn, remoteConn net.Conn) {
-	bufferData := make([]byte, BUFFER_SIZE+rand.Intn(128))
+	bufferData := make([]byte, BUFFER_SIZE)
 
 	for {
 		localConn.SetReadDeadline(time.Now().Add(time.Second * 5))
@@ -292,7 +291,7 @@ func readDataFromRemote(ch chan byte, remoteConn net.Conn, localConn net.Conn) {
 	defer func() {
 		//log.Println("leave readDataFromServer")
 	}()
-	data := make([]byte, BUFFER_SIZE+rand.Intn(128))
+	data := make([]byte, BUFFER_SIZE)
 	for {
 		remoteConn.SetReadDeadline(time.Now().Add(time.Second * 5))
 		n, err := remoteConn.Read(data)
