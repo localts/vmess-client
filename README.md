@@ -1,3 +1,3 @@
-# vmess-client2
+# vmess-client
 
-client for vmess
+client for vmess protocol.
