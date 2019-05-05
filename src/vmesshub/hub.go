@@ -229,8 +229,8 @@ func (vh *VmessHub) handleRemote(localConn net.Conn, shost, sport, rhost string)
 	}
 
 	defer func() {
-		debug.FreeOSMemory()
 		remoteConn.Close()
+		debug.FreeOSMemory()
 	}()
 
 	vcRemoteConn, err := vh.VC.NewConn(remoteConn, fmt.Sprintf("%s:%s", shost, sport))
